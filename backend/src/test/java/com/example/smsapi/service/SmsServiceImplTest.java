@@ -41,23 +41,43 @@ public class SmsServiceImplTest {
     }
 
     @Test
-    void splitMessage_shouldReturnSinglePart_whenMessageIsShort() {
-        String message = "Short message under 160 characters.";
-        List<String> parts = smsService.splitMessage(message);
+    void splitMessage_shouldReturnCorrectParts_whenMessageIsLong() {
+        String message = "A".repeat(350);
+        SmsServiceImpl service = new SmsServiceImpl();
 
-        assertEquals(1, parts.size());
-        assertEquals(message, parts.get(0));
+        List<String> parts = service.splitMessage(message);
+
+        assertEquals(3, parts.size(), "Expected 3 parts for 350 characters");
+
+        for (String part : parts) {
+            assertTrue(part.length() <= 160, "Each part should be <= MAX_SMS_LENGTH");
+            assertTrue(part.contains(" - Part "), "Each part should include a suffix");
+        }
+
+        String lastPart = parts.get(2);
+        String expectedSuffix = " - Part 3 of 3";
+        assertTrue(lastPart.endsWith(expectedSuffix), "Last part should end with correct suffix");
+        assertEquals(72, lastPart.length(), "Last part should be 58 content + 14 suffix = 72");
     }
 
     @Test
-    void splitMessage_shouldReturnMultipleParts_whenMessageIsLong() {
-        String message = "A".repeat(400);
+    void splitMessage_shouldHandleMoreThan99Parts() {
+        String message = "A".repeat(15_500);
         List<String> parts = smsService.splitMessage(message);
 
-        assertTrue(parts.size() > 1);
+        int totalParts = parts.size();
+
+        assertTrue(totalParts > 99);
+
         for (String part : parts) {
             assertTrue(part.length() <= 160);
+            assertTrue(part.contains(" - Part "));
+            assertTrue(part.endsWith(" of " + totalParts));
         }
+
+        String last = parts.get(parts.size() - 1);
+        String expectedSuffix = " - Part " + totalParts + " of " + totalParts;
+        assertTrue(last.endsWith(expectedSuffix));
     }
 
 }

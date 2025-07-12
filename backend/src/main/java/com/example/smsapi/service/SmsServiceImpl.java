@@ -26,24 +26,33 @@ public class SmsServiceImpl implements SmsService {
             return List.of(message);
         }
 
+        int totalMessageLength = message.length();
+        int estimatedParts = (int) Math.ceil((double) totalMessageLength / MAX_SMS_LENGTH);
+        int actualParts = 0;
+        int contentPerPart = 0;
+
+        while (estimatedParts != actualParts) {
+            actualParts = estimatedParts;
+
+            String suffixExample = " - Part " + actualParts + " of " + actualParts;
+            int suffixLength = suffixExample.length();
+
+            contentPerPart = MAX_SMS_LENGTH - suffixLength;
+            estimatedParts = (int) Math.ceil((double) totalMessageLength / contentPerPart);
+        }
+
         List<String> parts = new ArrayList<>();
-        int start = 0;
-        while (start < message.length()) {
-            int end = Math.min(start + MAX_SMS_LENGTH, message.length());
-            parts.add(message.substring(start, end));
-            start = end;
+        int index = 0;
+
+        for (int i = 1; i <= actualParts; i++) {
+            int end = Math.min(index + contentPerPart, message.length());
+            String content = message.substring(index, end);
+            String suffix = " - Part " + i + " of " + actualParts;
+            parts.add(content + suffix);
+            index = end;
         }
 
-        int totalParts = parts.size();
-        List<String> finalMessages = new ArrayList<>();
-
-        for (int i = 0; i < totalParts; i++) {
-            String suffix = String.format(PART_SUFFIX_TEMPLATE, i + 1, totalParts);
-            String part = parts.get(i);
-            finalMessages.add(part + suffix);
-        }
-
-        return finalMessages;
+        return parts;
     }
 
 }
