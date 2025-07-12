@@ -67,7 +67,6 @@ const SmsForm = () => {
                     variant="contained"
                     sx={{ mt: 2 }}
                     disabled={!phone || !message}
-                    disabled={!phone || !message}
                 >
                     Send
                 </Button>
