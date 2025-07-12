@@ -1,63 +1,94 @@
-import { useState } from 'react';
-import { TextField, Button, Snackbar, Alert, Stack } from '@mui/material';
-import {sendSms} from "../services/smsService.ts";
+import React, { useState } from "react";
+import {
+    Button,
+    TextField,
+    Typography,
+    Snackbar,
+    Alert,
+} from "@mui/material";
+import { sendSms } from "../services/smsService";
 
-export default function SmsForm() {
-    const [phone, setPhone] = useState('');
-    const [message, setMessage] = useState('');
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+const SmsForm = () => {
+    const [phone, setPhoneNumber] = useState("");
+    const [message, setMessage] = useState("");
+    const [snackbar, setSnackbar] = useState({
+        open: false,
+        message: "",
+        severity: "success" as "success" | "error",
+    });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
         try {
             await sendSms({ phone, message });
-            setSuccess(true);
-            setPhone('');
-            setMessage('');
-        } catch (err: any) {
-            setError(err.message || 'Something went wrong');
+            setSnackbar({
+                open: true,
+                message: "SMS sent successfully!",
+                severity: "success",
+            });
+            setPhoneNumber("");
+            setMessage("");
+        } catch (error: any) {
+            setSnackbar({
+                open: true,
+                message: error.message || "Failed to send SMS.",
+                severity: "error",
+            });
         }
     };
 
     return (
         <>
+            <Typography variant="h5" gutterBottom>
+                Send SMS
+            </Typography>
             <form onSubmit={handleSubmit}>
-                <Stack spacing={3}>
-                    <TextField
-                        label="Phone Number"
-                        variant="outlined"
-                        fullWidth
-                        value={phone}
-                        onChange={(e) => setPhone(e.target.value)}
-                    />
-                    <TextField
-                        label="Message"
-                        multiline
-                        rows={4}
-                        variant="outlined"
-                        fullWidth
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <Button variant="contained" color="primary" type="submit">
-                        Send
-                    </Button>
-                </Stack>
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Phone Number"
+                    variant="outlined"
+                    value={phone}
+                    onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+                <TextField
+                    fullWidth
+                    margin="normal"
+                    label="Message"
+                    multiline
+                    rows={4}
+                    variant="outlined"
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                />
+                <Button
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    sx={{ mt: 2 }}
+                    disabled={!phone || !message}
+                    disabled={!phone || !message}
+                >
+                    Send
+                </Button>
             </form>
 
-            <Snackbar open={success} autoHideDuration={3000} onClose={() => setSuccess(false)}>
-                <Alert severity="success" onClose={() => setSuccess(false)}>
-                    Message sent successfully!
-                </Alert>
-            </Snackbar>
-
-            <Snackbar open={!!error} autoHideDuration={3000} onClose={() => setError(null)}>
-                <Alert severity="error" onClose={() => setError(null)}>
-                    {error}
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={4000}
+                onClose={() => setSnackbar({ ...snackbar, open: false })}
+                anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+                <Alert
+                    severity={snackbar.severity}
+                    onClose={() => setSnackbar({ ...snackbar, open: false })}
+                    sx={{ width: "100%" }}
+                >
+                    {snackbar.message}
                 </Alert>
             </Snackbar>
         </>
     );
-}
+};
+
+export default SmsForm;
