@@ -1,37 +1,26 @@
 HELP.md
-.gradle
-build/
-!gradle/wrapper/gradle-wrapper.jar
-!**/src/main/**/build/
-!**/src/test/**/build/
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
-.project
-.settings
-.springBeans
-.sts4-cache
-bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
+# Ignorar todo lo que esté dentro de backend
+/backend/.gradle/
+/backend/build/
+/backend/out/
+/backend/.idea/
+/backend/.apt_generated/
+/backend/bin/
+/backend/.factorypath/
+/backend/.project
+/backend/.settings/
+/backend/.springBeans
+/backend/.sts4-cache
 
-### IntelliJ IDEA ###
-.idea
+# Archivos comunes de IDEs
 *.iws
 *.iml
 *.ipr
-out/
-!**/src/main/**/out/
-!**/src/test/**/out/
 
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-
-### VS Code ###
+# VS Code
 .vscode/
+
+# Gradle wrapper (ya lo tienes dentro de backend, así que lo permitimos)
+/backend/gradle-wrapper.jar
+!/backend/gradle/wrapper/gradle-wrapper.jar
