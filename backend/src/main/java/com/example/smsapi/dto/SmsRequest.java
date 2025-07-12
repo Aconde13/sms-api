@@ -9,7 +9,7 @@ public class SmsRequest {
     public SmsRequest() {
     }
 
-    public SmsRequest(String message, String phone) {
+    public SmsRequest(String phone, String message) {
         this.message = message;
         this.phone = phone;
     }

@@ -2,10 +2,10 @@ package com.example.smsapi.validation;
 
 import com.example.smsapi.dto.SmsRequest;
 import com.example.smsapi.exception.InvalidSmsException;
+import jakarta.validation.ValidationException;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SmsValidatorTest {
 
@@ -37,6 +37,18 @@ public class SmsValidatorTest {
     void shouldThrowWhenMessageIsNull() {
         SmsRequest request = new SmsRequest("1234567890", null);
         assertThrows(InvalidSmsException.class, () -> SmsValidator.validate(request));
+    }
+
+    @Test
+    void validate_shouldThrow_whenPhoneIsNotNumeric() {
+        SmsRequest request = new SmsRequest("abc123", "Hello");
+
+        InvalidSmsException exception = assertThrows(
+                InvalidSmsException.class,
+                () -> SmsValidator.validate(request)
+        );
+
+        assertEquals("Phone number must be valid (8 to 15 digits, optional +)", exception.getMessage());
     }
 
 }

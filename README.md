@@ -25,7 +25,10 @@ Any code change in the frontend reflects instantly. Backend changes require reco
 
 ### Manual (Without Docker)
 
-#### Backend (Java 17+)
+#### Backend
+
+1. Make sure you have Java 17+ and Gradle installed.
+2. Navigate to the `backend`.
 
 ```bash
 cd backend
@@ -33,6 +36,9 @@ cd backend
 ```
 
 #### Frontend
+
+1. Make sure you have Node.js version 18.x.
+2. Navigate to the `frontend`.
 
 ```bash
 cd frontend
@@ -134,6 +140,25 @@ Sending to 1234567890: Part 3 of 3
   "message": "Message sent"
 }
 ```
+
+### Valid Phone Number Formats
+
+The `phone` field must follow this format:
+
+- 8 to 15 digits
+- Can optionally start with a `+`
+- No spaces, dashes, or special characters allowed
+
+#### Valid examples:
+- `12345678`
+- `+50212345678`
+- `9876543210`
+- `+14155552671`
+
+#### Invalid examples:
+- `123-456-7890` (contains dashes)
+- `+502 1234 5678` (contains spaces)
+- `abc1234567` (contains letters)
 
 ---
 

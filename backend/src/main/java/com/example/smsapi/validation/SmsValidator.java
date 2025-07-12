@@ -10,6 +10,10 @@ public class SmsValidator {
             throw new InvalidSmsException("Phone number must not be empty");
         }
 
+        if (!request.getPhone().matches("^\\+?\\d{8,15}$")) {
+            throw new InvalidSmsException("Phone number must be valid (8 to 15 digits, optional +)");
+        }
+
         if (request.getMessage() == null || request.getMessage().trim().isEmpty()) {
             throw new InvalidSmsException("Message must not be empty");
         }

@@ -1,10 +1,14 @@
 import React, { useState } from "react";
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import {
     Button,
     TextField,
     Typography,
     Snackbar,
     Alert,
+    Tooltip,
+    InputAdornment,
+    IconButton
 } from "@mui/material";
 import { sendSms } from "../services/smsService";
 
@@ -50,6 +54,19 @@ const SmsForm = () => {
                     variant="outlined"
                     value={phone}
                     onChange={(e) => setPhoneNumber(e.target.value)}
+                    slotProps={{
+                        input: {
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <Tooltip title="8 to 15 digits, optionally starting with +. No spaces or dashes.">
+                                        <IconButton tabIndex={-1}>
+                                            <InfoOutlinedIcon fontSize="small" />
+                                        </IconButton>
+                                    </Tooltip>
+                                </InputAdornment>
+                            ),
+                        },
+                    }}
                 />
                 <TextField
                     fullWidth
