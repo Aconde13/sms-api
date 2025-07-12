@@ -13,10 +13,11 @@ HELP.md
 /backend/.springBeans
 /backend/.sts4-cache
 
-# React frontend (Vite)
+# React frontend (Vite + TypeScript)
 /frontend/node_modules/
 /frontend/dist/
 /frontend/.vite/
+/frontend/tsconfig.tsbuildinfo
 
 # Archivos comunes de IDEs
 *.iws
